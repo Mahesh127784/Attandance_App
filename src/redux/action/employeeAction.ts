@@ -1,25 +1,62 @@
-import employee from '../../redux-toolkit/features/employees/employee';
-import { Employee } from '../../types';
-import { ADD_EMPLOYEE, REMOVE_EMPLOYEE, UPDATE_EMPLOYEE } from '../actionTypes/employeeTypes';
+import {getToday} from 'react-native-modern-datepicker';
+import {Employee} from '../../utils/types';
+import {
+  ADD_UPDATE_EMPLOYEE,
+  ADD_EMPLOYEE_ATTANDANCE,
+  REMOVE_EMPLOYEE,
+} from '../actionTypes/employeeTypes';
+import {deleteEmpl, updateEmp} from './actionCreators/actionCreators';
+
+const getstateValue = (state: any) => state().Employee.employee;
 
 export const addEmployee = (employee: Employee) => {
-    return {
-        type: ADD_EMPLOYEE,
-        payload: employee
-    }
-}
+  return (dispatch: any, getState: any) => {
+    const state: Employee[] = getstateValue(getState) || [];
 
-export const removeEmployee = (employeeId: string) => {
-    return {
-        type: REMOVE_EMPLOYEE,
-        payload: employeeId
-    }
-}
+    const changedState = [...state, employee];
+
+    dispatch({
+      type: ADD_UPDATE_EMPLOYEE,
+      payload: changedState,
+    });
+  };
+};
+
+export const removeEmployee = (id: string) => {
+  return (dispatch: any, getState: any) => {
+    const state = getstateValue(getState) || [];
+    const updatedstate = deleteEmpl(id, state);
+
+    dispatch({
+      type: REMOVE_EMPLOYEE,
+      payload: updatedstate,
+    });
+  };
+};
 
 export const updateEmployee = (employee: Employee) => {
-    return {
-        type: UPDATE_EMPLOYEE,
-        payload: employee
-    }
-}
+  return (dispatch: any, getState: any) => {
+    const state = getstateValue(getState) || [];
 
+    const upDatedSate = updateEmp(employee, state);
+
+    dispatch({
+      type: ADD_UPDATE_EMPLOYEE,
+      payload: upDatedSate,
+    });
+  };
+};
+
+export const addAttandance = (attandance: []) => {
+  return (dispatch: any, getState: any) => {
+    const state = getState().Employee.employeeAttandanceList || {};
+    console.log(143, attandance);
+
+    const updatedAttandace = {...state, [getToday()]: attandance};
+
+    dispatch({
+      type: ADD_EMPLOYEE_ATTANDANCE,
+      payload: updatedAttandace,
+    });
+  };
+};

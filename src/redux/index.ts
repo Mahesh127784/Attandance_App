@@ -1,1 +1,1 @@
-export { addEmployee, updateEmployee, removeEmployee } from "./action/employeeAction";
+export { addEmployee, updateEmployee, removeEmployee, addAttandance } from "./action/employeeAction";
